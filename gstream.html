@@ -1,0 +1,550 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hub de Soluções - Grandstream</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --gs-blue: #0A2240; 
+            --gs-light-blue: #153A64; 
+            --gs-accent: #00a2ed; 
+            --gs-bg: #f4f6f9;
+        }
+
+        body {
+            background-color: var(--gs-bg);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            overflow-x: hidden;
+            margin: 0;
+        }
+
+        #wrapper {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* SIDEBAR RETRÁTIL E ALINHADA */
+        .sidebar {
+            background-color: var(--gs-blue);
+            color: #b0c0c7;
+            width: 260px;
+            transition: width 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+            flex-shrink: 0;
+            display: flex;
+            flex-direction: column;
+            overflow-x: hidden;
+        }
+
+        .sidebar.sidebar-collapsed {
+            width: 70px;
+        }
+
+        .sidebar-toggle-container {
+            display: flex;
+            justify-content: flex-end;
+            padding: 20px 20px 0 20px;
+            transition: 0.3s;
+        }
+
+        .sidebar.sidebar-collapsed .sidebar-toggle-container {
+            justify-content: center;
+            padding: 20px 0 0 0;
+        }
+
+        .sidebar-toggle {
+            color: white;
+            font-size: 1.4rem;
+            cursor: pointer;
+            width: 30px; /* Eixo de alinhamento */
+            text-align: center;
+        }
+
+        .sidebar .brand {
+            color: white;
+            font-size: 1.5rem;
+            font-weight: 800;
+            padding: 0 20px 20px 20px;
+            border-bottom: 1px solid #1e3a5f;
+            letter-spacing: 1px;
+            margin-top: 10px;
+            white-space: nowrap;
+        }
+
+        .solution-title {
+            font-size: 0.75rem;
+            font-weight: bold;
+            color: #6c757d;
+            text-transform: uppercase;
+            padding: 0 20px;
+            margin-top: 15px;
+            margin-bottom: 10px;
+            white-space: nowrap;
+        }
+
+        .sidebar-menu {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .sidebar-menu li {
+            padding: 12px 20px;
+            cursor: pointer;
+            transition: 0.3s;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            white-space: nowrap;
+        }
+
+        .sidebar-menu li:hover, .sidebar-menu li.active {
+            background-color: var(--gs-light-blue);
+            color: white;
+            border-left: 4px solid var(--gs-accent);
+        }
+
+        /* O segredo do alinhamento perfeito dos ícones */
+        .sidebar-menu li i {
+            min-width: 30px; 
+            text-align: center;
+            font-size: 1.15rem;
+            margin-right: 12px;
+            transition: margin 0.3s;
+        }
+
+        .sidebar.sidebar-collapsed .sidebar-menu li {
+            justify-content: center;
+            padding: 15px 0;
+            border-left: 4px solid transparent; /* Evita pulo ao focar */
+        }
+
+        .sidebar.sidebar-collapsed .sidebar-menu li.active {
+            border-left: 4px solid var(--gs-accent);
+        }
+
+        .sidebar.sidebar-collapsed .sidebar-menu li i {
+            margin-right: 0; /* Remove margem para centralizar */
+        }
+
+        /* Oculta textos suavemente */
+        .brand, .sidebar-menu li span, .solution-title {
+            transition: opacity 0.2s ease;
+            opacity: 1;
+        }
+
+        .sidebar.sidebar-collapsed .brand,
+        .sidebar.sidebar-collapsed .sidebar-menu li span,
+        .sidebar.sidebar-collapsed .solution-title {
+            opacity: 0;
+            display: none;
+        }
+
+        /* ÁREA DE CONTEÚDO */
+        .content-area {
+            flex-grow: 1;
+            padding: 25px;
+            background-color: #f8f9fa;
+        }
+
+        /* TABELA ESTILO MODERNO */
+        .table-container { background: white; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.03); padding: 25px; margin-top: 20px; }
+        .table thead th { background-color: #f1f4f9; color: var(--gs-blue); font-weight: 700; text-transform: uppercase; font-size: 0.75rem; letter-spacing: 0.5px; padding: 15px; border: none; }
+        .table tbody td { padding: 18px 15px; vertical-align: middle; border-bottom: 1px solid #f0f0f0; }
+
+        .spec-main { display: block; font-weight: 600; color: #2d3436; font-size: 0.9rem; }
+        .spec-sub { display: block; font-size: 0.8rem; color: #636e72; margin-top: 2px; }
+        .spec-icon { color: var(--gs-accent); margin-right: 6px; width: 16px; text-align: center; }
+        
+        .product-code { font-size: 0.75rem; color: #b2bec3; font-family: monospace; font-weight: bold;}
+        .model-name { font-size: 1.05rem; font-weight: 800; color: var(--gs-blue); margin-top: 2px;}
+
+        .tag-badge { background-color: #e1f5fe; color: var(--gs-accent); font-size: 0.65rem; padding: 3px 8px; border-radius: 4px; font-weight: 700; margin-right: 4px; margin-bottom: 4px; text-transform: uppercase; display: inline-block; }
+
+        /* Filtros */
+        .controls-wrapper { background: white; border-radius: 12px; padding: 20px; margin-bottom: 25px; box-shadow: 0 4px 12px rgba(0,0,0,0.03); }
+        .btn-adv-filter { background-color: var(--gs-blue); color: white; border-radius: 8px; border: none; font-weight: 600; transition: 0.3s; font-size: 0.85rem;}
+        .btn-adv-filter:hover { background-color: var(--gs-light-blue); color: white; }
+
+        .adv-panel { display: none; margin-top: 15px; padding-top: 15px; border-top: 1px solid #dee2e6; }
+        .filter-group-title { font-size: 0.8rem; font-weight: bold; color: #6c757d; text-transform: uppercase; border-bottom: 2px solid var(--gs-accent); padding-bottom: 5px; margin-bottom: 12px; display: inline-block; }
+
+        .tag-btn { border: 1px solid #dfe6e9; background: white; color: #636e72; border-radius: 6px; padding: 6px 12px; font-size: 0.85rem; transition: 0.2s; margin: 0 5px 8px 0; cursor: pointer; display: inline-block;}
+        .tag-btn.active { background-color: var(--gs-accent); color: white; border-color: var(--gs-accent); box-shadow: 0 4px 10px rgba(0,162,237,0.3); }
+
+        .info-card { border: none; border-left: 5px solid var(--gs-accent); border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.05); }
+    </style>
+</head>
+<body>
+
+    <div class="container-fluid px-0">
+        <div id="wrapper">
+            
+            <div class="sidebar d-none d-md-flex px-0" id="sidebar">
+                <div class="sidebar-toggle-container">
+                    <div class="sidebar-toggle" onclick="toggleSidebar()">
+                        <i class="fa-solid fa-bars"></i>
+                    </div>
+                </div>
+                <div class="brand">GRANDSTREAM</div>
+                <div class="solution-title">Soluções</div>
+                <ul class="sidebar-menu">
+                    <li class="active" onclick="setCategory('AP')">
+                        <i class="fa-solid fa-wifi"></i> <span>Access Points (AP)</span>
+                    </li>
+                    <li onclick="setCategory('Roteador')">
+                        <i class="fa-solid fa-network-wired"></i> <span>Roteadores</span>
+                    </li>
+                    <li onclick="setCategory('Telefone IP')">
+                        <i class="fa-solid fa-phone"></i> <span>Telefones IP</span>
+                    </li>
+                    <li onclick="setCategory('ATA')">
+                        <i class="fa-solid fa-box"></i> <span>Adaptadores ATA</span>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="content-area">
+                
+                <div class="card info-card mb-4">
+                    <div class="card-body py-3">
+                        <h5 class="card-title text-dark fs-6 fw-bold mb-2"><i class="fa-solid fa-circle-info text-gs-accent me-2"></i> Sobre a Grandstream & RMA</h5>
+                        <div class="row align-items-center text-secondary" style="font-size: 0.85rem;">
+                            <div class="col-md-6 border-end">
+                                <strong class="text-dark">Quem é a marca:</strong> Empresa norte americana fundada em 2002. Fabricante global de soluções de comunicação e redes.
+                            </div>
+                            <div class="col-md-6 ps-md-4 mt-2 mt-md-0">
+                                <strong class="text-dark">Política de RMA (Troca expressa):</strong> <br>
+                                <span class="text-gs-accent fw-bold">Telefonia:</span> 12 meses | <span class="text-gs-accent fw-bold">APs e Roteadores:</span> 36 meses.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="controls-wrapper">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <button class="btn btn-adv-filter px-4 py-2" onclick="toggleAdvFilters()">
+                            <i class="fa-solid fa-sliders me-2"></i> Filtros avançados
+                        </button>
+                        <div id="filter-status" class="small text-muted fw-bold">Nenhum filtro aplicado</div>
+                    </div>
+
+                    <div id="adv-panel" class="adv-panel">
+                        <div class="row" id="adv-filters-container"></div>
+                        <div class="text-end border-top pt-3 mt-2">
+                            <button class="btn btn-secondary btn-sm" onclick="clearFilters()">Limpar filtros</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="table-container">
+                    <div class="d-flex justify-content-between align-items-center mb-4">
+                        <h5 class="fw-bold m-0" id="current-cat-title" style="color: var(--gs-blue);">Access Points</h5>
+                        <span class="badge bg-light text-dark border p-2" id="total-registros">0 registro(s)</span>
+                    </div>
+                    
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th style="width: 25%;">Produto</th>
+                                    <th style="width: 25%;">Tecnologia / Banda</th>
+                                    <th style="width: 25%;">Performance</th>
+                                    <th style="width: 15%;">Interface</th>
+                                    <th style="width: 10%;">Alimentação</th>
+                                </tr>
+                            </thead>
+                            <tbody id="product-table-body"></tbody>
+                        </table>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const produtos = [
+            // ACCESS POINTS
+            { 
+                cod: "27383", modelo: "GWN7660E", categoria: "AP", 
+                tags: ["Wi-Fi 6", "Indoor", "2x2 MIMO"], 
+                tec_main: "Wi-Fi 6 AX3000", tec_sub: "Dual-Band 2x2:2 MU-MIMO",
+                cap_main: "Até 256 Dispositivos", cap_sub: "Alcance de 175 metros",
+                portas: "1x Gigabit (10/100/1000)", 
+                alim: "PoE 802.3at" 
+            },
+            { 
+                cod: "27385", modelo: "GWN7664E", categoria: "AP", 
+                tags: ["Wi-Fi 6", "Indoor", "4x4 MIMO"], 
+                tec_main: "Wi-Fi 6 AX6000", tec_sub: "Dual-Band 4x4:4 MU-MIMO",
+                cap_main: "Até 512 Dispositivos", cap_sub: "Alcance de 175 metros",
+                portas: "1x 2.5G Port + 1x Gigabit", 
+                alim: "PoE+ 802.3at" 
+            },
+            { 
+                cod: "27379", modelo: "GWN7664ELR", categoria: "AP", 
+                tags: ["Wi-Fi 6", "Outdoor", "IP67"], 
+                tec_main: "Wi-Fi 6 Outdoor AX6000", tec_sub: "IP67 contra chuva/poeira",
+                cap_main: "Até 512 Dispositivos", cap_sub: "Alcance de 300 metros",
+                portas: "1x 2.5G Port + 1x SFP Port", 
+                alim: "PoE+ 802.3at/af" 
+            },
+            { 
+                cod: "27390", modelo: "GWN7670", categoria: "AP", 
+                tags: ["Wi-Fi 7", "Indoor", "Tri-Band"], 
+                tec_main: "Wi-Fi 7 BE3600", tec_sub: "Tri-Band 2x2:2 MU-MIMO",
+                cap_main: "Até 256 Dispositivos", cap_sub: "Alcance de 175 metros",
+                portas: "2x Portas 2.5G Metálicas", 
+                alim: "PoE+ 802.3at" 
+            },
+            
+            // ROTEADOR
+            { 
+                cod: "27389", modelo: "GWN7002", categoria: "Roteador", 
+                tags: ["VPN", "Gigabit", "Multi-WAN"], 
+                tec_main: "Roteador VPN Multi-WAN", tec_sub: "Firewall Integrado",
+                cap_main: "2.2 Gbps IPsec VPN", cap_sub: "Até 30.000 sessões",
+                portas: "2x SFP + 4x Gigabit", 
+                alim: "PoE In / 2x PoE Out" 
+            },
+            
+            // TELEFONES IP
+            { 
+                cod: "27376", modelo: "DP752", categoria: "Telefone IP", 
+                tags: ["Base DECT", "Mobilidade"], 
+                tec_main: "Estação Base DECT", tec_sub: "Áudio Full HD",
+                cap_main: "10 Contas SIP / 5 Fones", cap_sub: "Alcance 400m Ext / 50m Int",
+                portas: "1x Ethernet 10/100", 
+                alim: "Micro-USB / PoE" 
+            },
+            { 
+                cod: "27386", modelo: "DP722", categoria: "Telefone IP", 
+                tags: ["Sem Fio DECT", "Colorido"], 
+                tec_main: "Aparelho Sem Fio DECT", tec_sub: "Tela Colorida HD",
+                cap_main: "Até 20 bases suportadas", cap_sub: "Alcance 350m (com DP752)",
+                portas: "Conector fone 3.5mm", 
+                alim: "Bateria (Base 5V)" 
+            },
+            { 
+                cod: "27375", modelo: "GRP2601", categoria: "Telefone IP", 
+                tags: ["Telefone Fixo", "Básico"], 
+                tec_main: "Telefone IP Fixo", tec_sub: "2 Linhas / Áudio HD",
+                cap_main: "2 Contas SIP", cap_sub: "Conferência de 5 vias",
+                portas: "2x Fast Ethernet", 
+                alim: "Fonte 5V 600mA" 
+            },
+            { 
+                cod: "27391", modelo: "GRP2601P", categoria: "Telefone IP", 
+                tags: ["Telefone Fixo", "PoE"], 
+                tec_main: "Telefone IP Fixo", tec_sub: "2 Linhas / Suporte PoE",
+                cap_main: "2 Contas SIP", cap_sub: "Conferência de 5 vias",
+                portas: "2x Fast Ethernet", 
+                alim: "Via PoE" 
+            },
+            { 
+                cod: "27374", modelo: "GRP2602G", categoria: "Telefone IP", 
+                tags: ["Telefone Fixo", "Gigabit"], 
+                tec_main: "Telefone IP Fixo", tec_sub: "4 Linhas / Dual-Band Wi-Fi",
+                cap_main: "4 Contas SIP", cap_sub: "Áudio HD",
+                portas: "2x Gigabit Ethernet", 
+                alim: "Fonte 5V 600mA" 
+            },
+            { 
+                cod: "27377", modelo: "GRP2602P", categoria: "Telefone IP", 
+                tags: ["Telefone Fixo", "PoE"], 
+                tec_main: "Telefone IP Fixo", tec_sub: "4 Linhas / Áudio HD",
+                cap_main: "4 Contas SIP", cap_sub: "Conferência de 5 vias",
+                portas: "2x Fast Ethernet", 
+                alim: "Via PoE" 
+            },
+            { 
+                cod: "27392", modelo: "GXP1610", categoria: "Telefone IP", 
+                tags: ["Telefone Fixo", "Legacy"], 
+                tec_main: "Telefone IP Básico", tec_sub: "Sem luz de fundo",
+                cap_main: "1 Conta SIP / 2 Linhas", cap_sub: "Uso diário",
+                portas: "2x Fast Ethernet", 
+                alim: "Fonte 5V 600mA" 
+            },
+            { 
+                cod: "27378", modelo: "GXP1625", categoria: "Telefone IP", 
+                tags: ["Telefone Fixo", "PoE", "Retroiluminado"], 
+                tec_main: "Telefone IP Fixo", tec_sub: "Visor LCD iluminado",
+                cap_main: "2 Contas SIP", cap_sub: "3 Teclas XML",
+                portas: "2x Fast Ethernet", 
+                alim: "Via PoE" 
+            },
+            { 
+                cod: "27381", modelo: "WP810", categoria: "Telefone IP", 
+                tags: ["Wi-Fi Sem Fio", "Portátil"], 
+                tec_main: "Telefone IP Wi-Fi", tec_sub: "Dual-Band Wi-Fi 5",
+                cap_main: "2 Contas SIP", cap_sub: "Bateria p/ 6h de conversa",
+                portas: "Micro USB (Carga)", 
+                alim: "Bateria de Lítio" 
+            },
+            
+            // ATA
+            { 
+                cod: "27382", modelo: "HT812 V2", categoria: "ATA", 
+                tags: ["2 FXS", "Gigabit", "Roteador NAT"], 
+                tec_main: "Adaptador ATA (2 FXS)", tec_sub: "Roteador NAT integrado",
+                cap_main: "2 Perfis SIP", cap_sub: "Áudio HD e Fax T.38",
+                portas: "2x FXS + 2x Gigabit", 
+                alim: "Fonte 12V Inclusa" 
+            }
+        ];
+
+        const specsFiltros = {
+            'AP': [
+                { titulo: "Tecnologia", tags: ["Wi-Fi 6", "Wi-Fi 7"] }, 
+                { titulo: "Ambiente", tags: ["Indoor", "Outdoor"] },
+                { titulo: "Performance", tags: ["2x2 MIMO", "4x4 MIMO"] }
+            ],
+            'Telefone IP': [
+                { titulo: "Tipo", tags: ["Telefone Fixo", "Sem Fio DECT", "Wi-Fi Sem Fio", "Base DECT", "Legacy"] },
+                { titulo: "Recursos", tags: ["PoE", "Gigabit", "Mobilidade", "Retroiluminado"] }
+            ],
+            'Roteador': [
+                { titulo: "Recursos", tags: ["VPN", "Gigabit", "Multi-WAN"] }
+            ],
+            'ATA': [
+                { titulo: "Portas", tags: ["2 FXS", "Gigabit", "Roteador NAT"] }
+            ]
+        };
+
+        let categoriaAtual = 'AP';
+        let tagsAtivas = [];
+
+        function toggleAdvFilters() {
+            const panel = document.getElementById('adv-panel');
+            panel.style.display = panel.style.display === 'none' || panel.style.display === '' ? 'block' : 'none';
+        }
+
+        // Função do Botão de Menu Hambúrguer
+        function toggleSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            sidebar.classList.toggle('sidebar-collapsed');
+        }
+
+        function renderAdvFiltersConfig() {
+            const container = document.getElementById('adv-filters-container');
+            container.innerHTML = '';
+            
+            const blocos = specsFiltros[categoriaAtual] || [];
+            
+            if(blocos.length > 0) {
+                blocos.forEach(bloco => {
+                    let tagsHtml = bloco.tags.map(tag => `<div class="tag-btn" onclick="toggleTag(this, '${tag}')">${tag}</div>`).join('');
+                    container.insertAdjacentHTML('beforeend', `
+                        <div class="col-md-4 mb-3">
+                            <span class="filter-group-title">${bloco.titulo}</span>
+                            <div>${tagsHtml}</div>
+                        </div>
+                    `);
+                });
+            } else {
+                container.innerHTML = '<div class="col-12 text-muted">Nenhum filtro avançado para esta categoria.</div>';
+            }
+        }
+
+        function toggleTag(elemento, tag) {
+            elemento.classList.toggle('active');
+            if(elemento.classList.contains('active')) {
+                tagsAtivas.push(tag);
+            } else {
+                tagsAtivas = tagsAtivas.filter(t => t !== tag);
+            }
+            atualizarStatusFiltro();
+            applyFilters();
+        }
+
+        function atualizarStatusFiltro() {
+            const statusLabel = document.getElementById('filter-status');
+            if(tagsAtivas.length > 0) {
+                statusLabel.innerHTML = `<span class="text-success">${tagsAtivas.length} filtro(s) aplicado(s)</span>`;
+            } else {
+                statusLabel.innerHTML = 'Nenhum filtro aplicado';
+            }
+        }
+
+        function applyFilters() {
+            let filtrados = produtos.filter(p => p.categoria === categoriaAtual);
+            
+            if(tagsAtivas.length > 0) {
+                filtrados = filtrados.filter(p => tagsAtivas.every(t => p.tags.includes(t)));
+            }
+            
+            renderTable(filtrados);
+        }
+
+        function setCategory(cat) {
+            categoriaAtual = cat;
+            tagsAtivas = [];
+            
+            document.querySelectorAll('.sidebar-menu li').forEach(li => {
+                li.classList.remove('active');
+                if(li.innerText.includes(cat) || (cat === 'AP' && li.innerText.includes('Access Points'))) {
+                    li.classList.add('active');
+                }
+            });
+            
+            document.getElementById('current-cat-title').innerText = cat === 'AP' ? 'Access Points' : cat + 's';
+            
+            atualizarStatusFiltro();
+            renderAdvFiltersConfig();
+            applyFilters();
+        }
+
+        function clearFilters() {
+            tagsAtivas = [];
+            document.querySelectorAll('.tag-btn').forEach(b => b.classList.remove('active'));
+            atualizarStatusFiltro();
+            applyFilters();
+        }
+
+        function renderTable(dados) {
+            const tbody = document.getElementById('product-table-body');
+            document.getElementById('total-registros').innerText = `Total: ${dados.length}`;
+            tbody.innerHTML = '';
+            
+            if(dados.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="5" class="text-center py-5 text-muted">Nenhum produto encontrado.</td></tr>';
+                return;
+            }
+
+            dados.forEach(p => {
+                const tagsHtml = p.tags.map(t => `<span class="tag-badge">${t}</span>`).join('');
+                
+                tbody.insertAdjacentHTML('beforeend', `
+                    <tr>
+                        <td>
+                            <span class="product-code">COD: ${p.cod}</span>
+                            <div class="model-name">${p.modelo}</div>
+                            <div class="mt-1">${tagsHtml}</div>
+                        </td>
+                        <td>
+                            <span class="spec-main">${p.tec_main}</span>
+                            <span class="spec-sub">${p.tec_sub}</span>
+                        </td>
+                        <td>
+                            <span class="spec-main"><i class="fa-solid fa-users spec-icon"></i> ${p.cap_main}</span>
+                            <span class="spec-sub"><i class="fa-solid fa-signal spec-icon"></i> ${p.cap_sub}</span>
+                        </td>
+                        <td>
+                            <span class="spec-main"><i class="fa-solid fa-ethernet spec-icon"></i> ${p.portas}</span>
+                        </td>
+                        <td>
+                            <span class="spec-main"><i class="fa-solid fa-bolt spec-icon"></i> ${p.alim}</span>
+                        </td>
+                    </tr>
+                `);
+            });
+        }
+
+        window.onload = () => setCategory('AP');
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
