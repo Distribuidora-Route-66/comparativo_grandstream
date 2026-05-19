@@ -670,6 +670,25 @@
             min-width: 220px;
         }
 
+        /* --- CLASSE NOVA PARA O ÍCONE DO PDF --- */
+        .pdf-link {
+            color: #ef4444; 
+            font-size: 1.15rem;
+            transition: var(--transition);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+            padding: 4px;
+            border-radius: 6px;
+        }
+        
+        .pdf-link:hover {
+            color: #dc2626;
+            background: #fee2e2;
+            transform: scale(1.1);
+        }
+
         .product-code {
             font-size: 0.7rem;
             color: #94a3b8;
@@ -682,7 +701,7 @@
             background: #f1f5f9;
             padding: 2px 8px;
             border-radius: 4px;
-            margin-bottom: 6px;
+            /* margin-bottom foi movido para o container flex via bootstrap classes no JS */
         }
 
         .model-name {
@@ -1031,7 +1050,8 @@
                 tec_main: "Wi-Fi 6 AX3000", tec_sub: "Dual-Band 2x2:2 MU-MIMO",
                 cap_main: "Até 256 Dispositivos", cap_sub: "Alcance de 175 m²",
                 portas: "1x Gigabit (10/100/1000)", 
-                alim: "PoE 802.3at" 
+                alim: "PoE 802.3at",
+                pdfLink: "https://www.grandstream.com/hubfs/Product_Documentation/GWN7660E/Datasheet_GWN7660E_Portuguese.pdf"
             },
             { 
                 cod: "27385", modelo: "GWN7664E", categoria: "AP", 
@@ -1039,7 +1059,8 @@
                 tec_main: "Wi-Fi 6 AX6000", tec_sub: "Dual-Band 4x4:4 MU-MIMO",
                 cap_main: "Até 512 Dispositivos", cap_sub: "Alcance de 175 m²",
                 portas: "1x 2.5G Port + 1x Gigabit", 
-                alim: "PoE+ 802.3at" 
+                alim: "PoE+ 802.3at",
+                pdfLink: "https://www.grandstream.com/hubfs/Product_Documentation/GWN7664E/Datasheet_GWN7664E_Portuguese.pdf"
             },
             { 
                 cod: "27379", modelo: "GWN7664ELR", categoria: "AP", 
@@ -1047,7 +1068,8 @@
                 tec_main: "Wi-Fi 6 Outdoor AX6000", tec_sub: "IP67 contra chuva/poeira",
                 cap_main: "Até 512 Dispositivos", cap_sub: "Alcance de 300 m²",
                 portas: "1x 2.5G Port + 1x SFP Port", 
-                alim: "PoE+ 802.3at/af" 
+                alim: "PoE+ 802.3at/af",
+                pdfLink: "https://www.grandstream.com/hubfs/Product_Documentation/GWN7664ELR/Datasheet_GWN7664ELR_Portuguese.pdf"
             },
             { 
                 cod: "27390", modelo: "GWN7670", categoria: "AP", 
@@ -1055,7 +1077,8 @@
                 tec_main: "Wi-Fi 7 BE3600", tec_sub: "Tri-Band 2x2:2 MU-MIMO",
                 cap_main: "Até 256 Dispositivos", cap_sub: "Alcance de 175 m²",
                 portas: "2x Portas 2.5G Metálicas", 
-                alim: "PoE+ 802.3at" 
+                alim: "PoE+ 802.3at",
+                pdfLink: "https://www.grandstream.com/hubfs/Product_Documentation/GWN7670/Datasheet_GWN7670_Portuguese.pdf"
             },
 
             // ROTEADOR
@@ -1065,7 +1088,8 @@
                 tec_main: "Roteador VPN Multi-WAN", tec_sub: "Firewall Integrado",
                 cap_main: "2.2 Gbps IPsec VPN", cap_sub: "Até 30.000 sessões",
                 portas: "2x SFP + 4x Gigabit", 
-                alim: "PoE In / 2x PoE Out" 
+                alim: "PoE In / 2x PoE Out",
+                pdfLink: "https://www.grandstream.com/hubfs/Product_Documentation/GWN7001_GWN7002_GWN7003/Datasheet_GWN7001_GWN7002_GWN7003_Portuguese.pdf"
             },
 
             // TELEFONES IP
@@ -1075,7 +1099,8 @@
                 tec_main: "Estação Base DECT", tec_sub: "Áudio Full HD",
                 cap_main: "10 Contas SIP / 5 Fones", cap_sub: "Alcance 400m Ext / 50m Int",
                 portas: "1x Ethernet 10/100", 
-                alim: "Micro-USB / PoE" 
+                alim: "Micro-USB / PoE",
+                pdfLink: "https://www.grandstream.com/hubfs/Product_Documentation/datasheet_dp752_portuguese.pdf"
             },
             { 
                 cod: "27386", modelo: "DP722", categoria: "Telefone IP", 
@@ -1083,7 +1108,8 @@
                 tec_main: "Aparelho Sem Fio DECT", tec_sub: "Tela Colorida HD",
                 cap_main: "Até 20 bases suportadas", cap_sub: "Alcance 350m (com DP752)",
                 portas: "Conector fone 3.5mm", 
-                alim: "Bateria (Base 5V)" 
+                alim: "Bateria (Base 5V)",
+                pdfLink: "https://www.grandstream.com/hubfs/Product_Documentation/datasheet_dp722_portuguese.pdf"
             },
             { 
                 cod: "27375", modelo: "GRP2601", categoria: "Telefone IP", 
@@ -1091,7 +1117,8 @@
                 tec_main: "Telefone IP Fixo", tec_sub: "2 Linhas / Áudio HD",
                 cap_main: "2 Contas SIP", cap_sub: "Conferência de 5 vias",
                 portas: "2x Fast Ethernet", 
-                alim: "Fonte 5V 600mA" 
+                alim: "Fonte 5V 600mA",
+                pdfLink: "https://www.grandstream.com/hubfs/Product_Documentation/Datasheet_GRP2601_Portuguese.pdf"
             },
             { 
                 cod: "27391", modelo: "GRP2601P", categoria: "Telefone IP", 
@@ -1099,7 +1126,8 @@
                 tec_main: "Telefone IP Fixo", tec_sub: "2 Linhas / Suporte PoE",
                 cap_main: "2 Contas SIP", cap_sub: "Conferência de 5 vias",
                 portas: "2x Fast Ethernet", 
-                alim: "Via PoE" 
+                alim: "Via PoE",
+                pdfLink: "https://www.grandstream.com/hubfs/Product_Documentation/Datasheet_GRP2601_Portuguese.pdf"
             },
             { 
                 cod: "27374", modelo: "GRP2602G", categoria: "Telefone IP", 
@@ -1107,7 +1135,8 @@
                 tec_main: "Telefone IP Fixo", tec_sub: "4 Linhas / Dual-Band Wi-Fi",
                 cap_main: "4 Contas SIP", cap_sub: "Áudio HD",
                 portas: "2x Gigabit Ethernet", 
-                alim: "Fonte 5V 600mA" 
+                alim: "Fonte 5V 600mA",
+                pdfLink: "https://www.grandstream.com/hubfs/Product_Documentation/Datasheet_GRP2602_Portuguese.pdf"
             },
             { 
                 cod: "27377", modelo: "GRP2602P", categoria: "Telefone IP", 
@@ -1115,7 +1144,8 @@
                 tec_main: "Telefone IP Fixo", tec_sub: "4 Linhas / Áudio HD",
                 cap_main: "4 Contas SIP", cap_sub: "Conferência de 5 vias",
                 portas: "2x Fast Ethernet", 
-                alim: "Via PoE" 
+                alim: "Via PoE",
+                pdfLink: "https://www.grandstream.com/hubfs/Product_Documentation/Datasheet_GRP2602_Portuguese.pdf"
             },
             { 
                 cod: "27392", modelo: "GXP1610", categoria: "Telefone IP", 
@@ -1123,7 +1153,8 @@
                 tec_main: "Telefone IP Básico", tec_sub: "Sem luz de fundo",
                 cap_main: "1 Conta SIP / 2 Linhas", cap_sub: "Uso diário",
                 portas: "2x Fast Ethernet", 
-                alim: "Fonte 5V 600mA" 
+                alim: "Fonte 5V 600mA",
+                pdfLink: "https://www.grandstream.com/hubfs/Product_Documentation/datasheet_gxp1610_1615_portuguese.pdf"
             },
             { 
                 cod: "27378", modelo: "GXP1625", categoria: "Telefone IP", 
@@ -1131,7 +1162,8 @@
                 tec_main: "Telefone IP Fixo", tec_sub: "Visor LCD iluminado",
                 cap_main: "2 Contas SIP", cap_sub: "3 Teclas XML",
                 portas: "2x Fast Ethernet", 
-                alim: "Via PoE" 
+                alim: "Via PoE",
+                pdfLink: "https://www.grandstream.com/hubfs/Product_Documentation/datasheet_gxp1620_1625_portuguese.pdf"
             },
             { 
                 cod: "27381", modelo: "WP810", categoria: "Telefone IP", 
@@ -1139,7 +1171,8 @@
                 tec_main: "Telefone IP Wi-Fi", tec_sub: "Dual-Band Wi-Fi 5",
                 cap_main: "2 Contas SIP", cap_sub: "Bateria p/ 6h de conversa",
                 portas: "Micro USB (Carga)", 
-                alim: "Bateria de Lítio" 
+                alim: "Bateria de Lítio",
+                pdfLink: "https://www.grandstream.com/hubfs/Product_Documentation/Datasheet_WP810_Portuguese.pdf"
             },
 
             // ATA
@@ -1149,7 +1182,8 @@
                 tec_main: "Adaptador ATA (2 FXS)", tec_sub: "Roteador NAT integrado",
                 cap_main: "2 Perfis SIP", cap_sub: "Áudio HD e Fax T.38",
                 portas: "2x FXS + 2x Gigabit", 
-                alim: "Fonte 12V Inclusa" 
+                alim: "Fonte 12V Inclusa",
+                pdfLink: "https://www.grandstream.com/hubfs/Product_Documentation/HT812%20v2/datasheet_ht812%20V2_portuguese.pdf"
             }
         ];
 
@@ -1337,10 +1371,17 @@
             dados.forEach((p, index) => {
                 const tagsHtml = p.tags.map(t => `<span class="tag-badge">${t}</span>`).join('');
 
+                // Modificação no template literal para exibir o PDF ao lado do código
                 tbody.insertAdjacentHTML('beforeend', `
                     <tr style="animation-delay: ${index * 0.05}s">
                         <td class="product-cell">
-                            <span class="product-code"><i class="fa-solid fa-barcode"></i> COD: ${p.cod}</span>
+                            <div class="d-flex align-items-center gap-2 mb-2">
+                                <span class="product-code m-0"><i class="fa-solid fa-barcode"></i> COD: ${p.cod}</span>
+                                ${p.pdfLink ? `
+                                <a href="${p.pdfLink}" target="_blank" class="pdf-link" title="Ver Datasheet" rel="noopener noreferrer">
+                                    <i class="fa-solid fa-file-pdf"></i>
+                                </a>` : ''}
+                            </div>
                             <div class="model-name">${p.modelo}</div>
                             <div class="tags-row">${tagsHtml}</div>
                         </td>
